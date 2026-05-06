@@ -3,13 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Util;
+
 import java.sql.*;
+
 /**
  *
  * @author Adriano
  */
 public class ConexionSingleton {
-    
+
     //creado una variable estatica 
     public static Connection connection;
 
@@ -44,5 +46,3 @@ public class ConexionSingleton {
         }
     }
 }
-
-       
