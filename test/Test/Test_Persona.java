@@ -5,7 +5,9 @@
 package Test;
 
 import Dao.PersonaDaoImpl;
+import Dao.UsuarioDaoImpl;
 import Interface.IPersona;
+import Interface.IUsuario;
 import Model.Persona;
 import Model.Rol;
 import Model.Usuario;
@@ -17,10 +19,12 @@ import Model.Usuario;
 public class Test_Persona {
 
     IPersona dao = new PersonaDaoImpl();
+    IUsuario udao = new UsuarioDaoImpl();
 
     public static void main(String[] args) {
         Test_Persona t = new Test_Persona();
-        t.insert();
+        //t.insert();//
+        t.valid_user();
     }
 
     public void insert() {
@@ -43,5 +47,21 @@ public class Test_Persona {
         } else {
             System.out.println("No se pudo realizar el registro...");
         }
+    }
+
+    public void valid_user() {
+        Usuario u = udao.validate("adriano.manrique.c@gmail.com", "admin123");
+        if (u != null && u.getPersona() != null) {
+            System.out.println("Bienvenido:" + u.getPersona().getNombre());
+            System.out.println("Rol:" + u.getRol());
+            System.out.println("Usuario:" + u.getUsuario());
+            System.out.println("User ID:" + u.getId_usuario());
+            System.out.println("Person ID:" + u.getPersona().getId_persona());
+            System.out.println("Password: "+ u.getPassword());
+        } else {
+            System.out.println("Creedenciales incorrectas");
+
+        }
+
     }
 }
