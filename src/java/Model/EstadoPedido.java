@@ -8,6 +8,10 @@ package Model;
  *
  * @author Adriano
  */
-public class EstadoPedido {
-    
+public enum EstadoPedido {
+    PENDIENTE,
+    PROCESADO,
+    ENVIADO,
+    ENTREGADO,
+    CANCELADO
 }
