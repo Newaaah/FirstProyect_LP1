@@ -28,7 +28,7 @@ public class ProductoDaoImpl implements IProducto {
         String query = null;
 
         try {
-            query = "SELECT id_producto, nombre, descripcion, precio, stock "
+            query = "SELECT id_producto, nombre, descripcion, precio, stock, imagen "
                     + "FROM productos";
 
             lista = new ArrayList<>();
@@ -42,6 +42,7 @@ public class ProductoDaoImpl implements IProducto {
                 pr.setDescripcion(rs.getString("descripcion"));
                 pr.setPrecio(rs.getDouble("precio"));
                 pr.setStock(rs.getInt("stock"));
+                pr.setImagen(rs.getString("imagen"));
                 lista.add(pr);
             }
 
