@@ -15,6 +15,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -27,6 +29,8 @@ public class ProductoController extends HttpServlet {
     private final IProducto pDao = new ProductoDaoImpl();
 
     private final Gson gson = new Gson();
+
+    private static final String UPLOAD_DIR = "assets/img/productos";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -63,17 +67,49 @@ public class ProductoController extends HttpServlet {
             throws IOException {
         List<Productos> productos = pDao.lista();
         response.getWriter().print(gson.toJson(productos));
-        
+
     }
 
     private void guardarProductos(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        Productos p = new Productos();
+        p.setNombre(request.getParameter("nombre"));
+        p.setDescripcion(request.getParameter("descripcion"));
+        p.setPrecio(Double.parseDouble(request.getParameter("descripcion")));
+        p.setPrecio(Double.parseDouble(request.getParameter("precio")));
+        p.setStock(Integer.parseInt(request.getParameter("stock")));
 
+        Part part = request.getPart("imagen");
     }
 
     private void editarProductos(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        try {
 
+            Productos p = new Productos();
+            p.setNombre(request.getParameter("nombre"));
+            p.setDescripcion(request.getParameter("descripcion"));
+            p.setPrecio(Double.parseDouble(request.getParameter("precio")));
+            p.setStock(Integer.parseInt(request.getParameter("stock")));
+            p.setId_producto(Integer.parseInt(request.getParameter("id_producto")));
+
+            Part part = request.getPart("imagen");
+
+            if (part != null && part.getSize() > 0) {
+                String fileName = part.getSubmittedFileName();
+                String uploadPath = getServletContext().getRealPath("")
+                        + File.separator + UPLOAD_DIR;
+                part.write(uploadPath + File.separator + fileName);
+                p.setImagen(UPLOAD_DIR + "/" + fileName);
+            } else {
+                p.setImagen(request.getParameter("imagen_actual"));
+            }
+            boolean res = pDao.update(p);
+            response.getWriter().print(gson.toJson(res));
+
+        } catch (Exception e) {
+            response.getWriter().print(gson.toJson(false));
+        }
     }
 
     private void eliminarProductos(HttpServletRequest request, HttpServletResponse response)
